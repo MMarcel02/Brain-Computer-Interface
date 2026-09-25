@@ -1,0 +1,6 @@
+numpy
+pygame
+pylsl
+pyserial
+scikit_learn
+scipy
