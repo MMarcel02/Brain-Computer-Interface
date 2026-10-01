@@ -86,7 +86,7 @@ TEXT     = (200, 200, 200)
 BG       = (0, 0, 0)
 WALL     = (105, 154, 104)
 PATH     = (153, 209, 1)
-ARROW_ARMED_TINT = (150, 140, 220)  # highlight color when an arrow is "armed" (selected)
+ARROW_ARMED_TINT = (44, 20, 255)  # highlight color when an arrow is "armed" (selected)
 CHECKER1         = (255, 255, 255)  # arrow checker-pattern color 1
 CHECKER2         = (0, 0, 0)        # arrow checker-pattern color 2
 
