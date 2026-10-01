@@ -219,7 +219,7 @@ class UI:
 
         if is_armed:
             pg.draw.polygon(self.surf, ARROW_ARMED_TINT,
-                            [(x + cx - size, y + cy - size) for (x, y) in poly], 3)
+                            [(x + cx - size, y + cy - size) for (x, y) in poly], 5)
 
         if draw_label:
             lbl = self.small.render(d, True, TEXT)

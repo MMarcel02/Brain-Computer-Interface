@@ -31,7 +31,7 @@ MAZE_PATH = "mazes/level0.txt"  # which ASCII maze file to load (see Maze.py)
 WINDOW_W, WINDOW_H = 1280, 720   # starting window size (the game maximizes on top of this)
 MIN_SIDEBAR_PX = 200             # minimum width (px) reserved for the arrow sidebar in UI.py
                                   # -> too small and the arrows/labels get cramped.
-ARROW_SIZE_PX = 36               # fixed size (px) of each sidebar arrow. Unlike MIN_SIDEBAR_PX,
+ARROW_SIZE_PX = 60               # fixed size (px) of each sidebar arrow. Unlike MIN_SIDEBAR_PX,
                                   # this does NOT adjust itself to the window — if you make the
                                   # sidebar much narrower/shorter than the default, arrows this
                                   # size may not all fit
@@ -85,7 +85,7 @@ TEXT     = (200, 200, 200)
 BG       = (0, 0, 0)
 WALL     = (105, 154, 104)
 PATH     = (153, 209, 1)
-ARROW_ARMED_TINT = (150, 140, 220)  # highlight color when an arrow is "armed" (selected)
+ARROW_ARMED_TINT = (44, 20, 255)  # highlight color when an arrow is "armed" (selected)
 CHECKER1         = (255, 255, 255)  # arrow checker-pattern color 1
 CHECKER2         = (0, 0, 0)        # arrow checker-pattern color 2
 
