@@ -21,7 +21,7 @@ from Controller import Controller
 
 from pylsl import resolve_byprop as lsl_resolve_byprop, StreamInlet as LSLInlet
 
-from Config import TARGET_FREQS, FREQ_TO_DIR, MAZE_PATH, WINDOW_W, WINDOW_H, MIN_SIDEBAR_PX
+from Config import TARGET_FREQS, FREQ_TO_DIR, MAZE_PATH, WINDOW_W, WINDOW_H, MIN_SIDEBAR_PX, AVAILABLE_MAZES
 
 
 def nearest_dir_from_freq(f):
@@ -124,7 +124,8 @@ def main():
     clock = pg.time.Clock()
 
     # --- load maze from file (change which maze loads via Config.MAZE_PATH) ---
-    lines = read_ascii_maze(MAZE_PATH)
+    maze_number = 0
+    lines = read_ascii_maze(AVAILABLE_MAZES[maze_number])
     maze = Maze(lines)
 
     # --- pygame / window ---
@@ -151,8 +152,8 @@ def main():
 
     # Compute cell size to maximize maze height, while keeping at least
     # Config.MIN_SIDEBAR_PX of width for the arrow sidebar.
-    cell_px_h = screen_h // maze.rows
-    cell_px_w = max(1, (screen_w - MIN_SIDEBAR_PX) // maze.cols)
+    cell_px_h = screen_h // 9
+    cell_px_w = max(1, (screen_w - MIN_SIDEBAR_PX) // 11)
     cell_px = max(1, min(cell_px_h, cell_px_w))
 
     # recompute actual sidebar to fill remaining width exactly
@@ -187,6 +188,19 @@ def main():
 
         pg.display.flip()
         ui.frame_idx += 1
+
+        if ctrl.pos_rc == maze.goal:
+            end = time.time() + 2
+
+            maze_number = (maze_number + 1) % 4
+            lines = read_ascii_maze(AVAILABLE_MAZES[maze_number])
+            maze = Maze(lines)
+
+            ctrl.maze = maze
+            ctrl.pos_rc = maze.start
+
+            while time.time() < end:
+                if False: print(":D") #something to shut up the compilation errors
 
     # teardown
     pg.quit()
