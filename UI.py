@@ -57,6 +57,7 @@ class UI:
         self.sidebar_px = sidebar_px
 
         pg.font.init()
+        self.big_font= pg.font.SysFont("consolas", 32)
         self.font = pg.font.SysFont("consolas", 16)
         self.small = pg.font.SysFont("consolas", 13)
 
@@ -426,3 +427,66 @@ class UI:
             # label
             lbl = self.small.render(f"Ch{ci+1}", True, (160, 160, 160))
             self.surf.blit(lbl, (12, y0 + 2))
+
+    lines = [
+        "- Focus on a flickering arrow to trigger a move",
+        "- Each arrow flashes at its own frequency",
+        "- Your brain waves will start to match the frequency of the flickering arrow",
+        "- When the game detects your brain at the arrow's frequency it registers that as a move",
+        "- Reach the goal (light green square) to complete the maze",
+        "- Watch out! Difficulty of mazes increases!"
+    ]
+
+    def draw_tutorial_screen(self, screen_w, screen_h):
+        screen_center_x = screen_w / 2
+        screen_center_y = screen_h / 2
+
+        tutorial_rect = pg.Rect(0, 0, screen_w * 0.75, screen_h * 0.75)
+        tutorial_rect.center = (screen_center_x, screen_center_y)
+
+        pg.draw.rect(self.surf, (175, 235, 175), tutorial_rect, border_radius=10)
+
+        title = self.big_font.render("Tutorial", True, (0, 0, 0))
+        title_rect = title.get_rect(centerx=screen_center_x, top=tutorial_rect.top + 40)
+        self.surf.blit(title, title_rect)
+
+        current_x = tutorial_rect.left + 40
+        current_y = title_rect.bottom + 100
+        max_width = tutorial_rect.width - 70
+
+        for line in self.lines:
+            current_y = self._draw_wrapped_text(line, self.big_font, current_x, current_y, max_width)
+            current_y += 50
+
+        # Continue instruction
+        bottom_y = tutorial_rect.bottom - 40
+        continue_instr = self.big_font.render("Press SPACE to start playing!", True, (0, 0, 0))
+        text_rect = continue_instr.get_rect(centerx=screen_center_x, bottom=bottom_y)
+        self.surf.blit(continue_instr, text_rect)
+
+    def _draw_wrapped_text(self, text, font, x, start_y, max_width, line_spacing=4):
+        words = text.split(" ")
+        current_line = []
+
+        y = start_y
+        line_height = font.get_linesize() + line_spacing
+
+        for word in words:
+            test_line = " ".join(current_line + [word])
+        
+            if font.size(test_line)[0] <= max_width:
+                current_line.append(word)
+            else:
+                if current_line:
+                    line_surf = font.render(" ".join(current_line), True, (0, 0, 0))
+                    self.surf.blit(line_surf, (x, y))
+                    y += line_height
+                current_line = [word]
+
+        if current_line:
+            line_surf = font.render(" ".join(current_line), True, (0, 0, 0))
+            self.surf.blit(line_surf, (x, y))
+            y += line_height
+
+        return y
+

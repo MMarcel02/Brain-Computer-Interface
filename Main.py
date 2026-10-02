@@ -164,12 +164,17 @@ def main():
     ui = UI(surf, cell_px=cell_px, sidebar_px=sidebar_px)
     ctrl = Controller(maze, cell_px=cell_px, bci=bci)
 
+    show_tutorial = True
+
     ui.frame_idx = 0
     running = True
     while running:
         dt = clock.tick(60) / 1000.0
 
+
         for ev in pg.event.get():
+            if ev.type == pg.KEYDOWN and ev.key == pg.K_SPACE:
+                show_tutorial = not show_tutorial
             if ev.type == pg.QUIT:
                 running = False
             elif ev.type == pg.KEYDOWN and ev.key == pg.K_ESCAPE:
@@ -185,6 +190,12 @@ def main():
             steps=ctrl.step_count,
             elapsed_s=ctrl.elapsed_time
         )
+
+        
+
+        screen_w, screen_h = surf.get_size()
+        if show_tutorial:
+            ui.draw_tutorial_screen(screen_w, screen_h)
 
         pg.display.flip()
         ui.frame_idx += 1
