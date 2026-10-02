@@ -66,19 +66,13 @@ class Controller:
 
         d = self.bci.poll_direction()  # 'N', 'E', 'S', 'W', or ''
 
-        # Update armed_dir immediately (resets to '' when no direction is detected)
         self.armed_dir = d
 
         if not d:
             return
 
-        # Attempt step
         self.step_success = self._try_step(d)
-        
-        # Put on cooldown whether successful or blocked to prevent frame spamming
         self._cd_left = self._move_cooldown
-
-        # Record move exactly ONCE right here when the move event fires
         self.past_moves.append((self.armed_dir, self.step_success))
 
     def update(self, dt):
