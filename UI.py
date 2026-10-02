@@ -490,3 +490,30 @@ class UI:
 
         return y
 
+
+    def draw_past_moves(self, screen_w, screen_h, past_moves):
+        past_moves_rect = pg.Rect(0, 0, screen_w * 0.15, screen_h * 0.15)
+        past_moves_rect.topleft = (30, 30)
+        pg.draw.rect(self.surf, (175, 235, 175), past_moves_rect, border_radius=10)
+
+        # Start from the bottom interior, moving upwards
+        padding = 8
+        current_y = past_moves_rect.bottom - padding
+        current_x = past_moves_rect.left + padding
+
+        for move in reversed(past_moves):
+            dir, success = move
+            move_line = f"{success}, {dir}"
+            line_surf = self.font.render(move_line, True, (0, 0, 0))
+
+            # Move upward by the rendered surface's actual height + line spacing
+            current_y -= line_surf.get_height() + 2
+
+            # Stop rendering once text exceeds the top boundary
+            if current_y < past_moves_rect.top + padding:
+                break
+
+            self.surf.blit(line_surf, (current_x, current_y))
+
+
+

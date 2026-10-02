@@ -26,7 +26,9 @@ class Controller:
         self.pos_rc = maze.start
         self.heading = "E"
         self.armed_dir = None
+        self.step_success = False
         self.bci = bci
+        self.past_moves =[]
 
         # --- move debouncing -------------------------------------------------
         # After a successful step we ignore new directions for
@@ -57,17 +59,27 @@ class Controller:
         """Poll the BCI source (if any) and apply a move if one is ready."""
         if not self.bci:
             return
+            
         if self._cd_left > 0:
             self._cd_left -= dt
             return
 
-        d = self.bci.poll_direction()  # 'N', 'E', 'S', 'W', or '' (nothing detected)
+        d = self.bci.poll_direction()  # 'N', 'E', 'S', 'W', or ''
+
+        # Update armed_dir immediately (resets to '' when no direction is detected)
+        self.armed_dir = d
+
         if not d:
             return
 
-        self.armed_dir = d  # remember it so UI.py can highlight the matching arrow
-        if self._try_step(d):
-            self._cd_left = self._move_cooldown
+        # Attempt step
+        self.step_success = self._try_step(d)
+        
+        # Put on cooldown whether successful or blocked to prevent frame spamming
+        self._cd_left = self._move_cooldown
+
+        # Record move exactly ONCE right here when the move event fires
+        self.past_moves.append((self.armed_dir, self.step_success))
 
     def update(self, dt):
         """Advance game state by `dt` seconds. Call once per frame from Main.py."""

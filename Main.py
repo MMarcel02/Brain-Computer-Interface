@@ -191,9 +191,9 @@ def main():
             elapsed_s=ctrl.elapsed_time
         )
 
-        
-
         screen_w, screen_h = surf.get_size()
+        ui.draw_past_moves(screen_w, screen_h, ctrl.past_moves)
+
         if show_tutorial:
             ui.draw_tutorial_screen(screen_w, screen_h)
 
